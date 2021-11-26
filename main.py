@@ -1,4 +1,5 @@
 import sys
+from time import sleep
 import pygame
 from pygame.locals import *
 from colors import *
@@ -18,20 +19,53 @@ def draw_text(surface, text, font_name, font_size, x, y, text_color, background_
     text = font.render(text, True, text_color, background_color)
     surface.blit(text, (x,y))
 
-def draw(screen):
-    screen.fill(BLACK)
-    
-    
+def highlight_element(screen, arr, index ):
+    x = 50 * index
+    width = 30
+    height = arr[index] * UNIT
+    y = 400 - height
+    draw_rect(screen, BLUE, x, y, width, height)
+    draw_text(screen, str(arr[index]), 'freesansbold.ttf', 16, x, 400, GREEN, BLUE)
+
+def unhighlight_element(screen, arr, index):
+    x = 50 * index
+    width = 30
+    height = arr[index] * UNIT
+    y = 400 - height
+    draw_rect(screen, RED, x, y, width, height)
+    draw_text(screen, str(arr[index]), 'freesansbold.ttf', 16, x, 400, GREEN, BLUE)
+
+def draw_array(screen, arr):
+    size = len(arr)
     for i in range(size):
         x = 50 * i
         width = 30
-        height = to_sort[i] * UNIT
+        height = arr[i] * UNIT
         y = 400 - height
         draw_rect(screen, RED, x, y, width, height)
         draw_text(screen, str(to_sort[i]), 'freesansbold.ttf', 16, x, 400, GREEN, BLUE)
-    
     pygame.display.flip()
-    
+
+        
+def bubble_sort(screen, arr):
+    n = len(arr)
+    for i in range(n-1):
+        for j in range(0, n-i-1):
+            highlight_element(screen, arr, j)
+            highlight_element(screen, arr, j+1)
+            sleep(2)
+            unhighlight_element(screen, arr, j)
+            unhighlight_element(screen, arr, j+1)
+            if arr[j] > arr[j + 1] :
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+                draw_array(screen, arr)
+                sleep(1)
+
+
+def draw(screen):
+    screen.fill(BLACK)
+    # draw_array(screen, to_sort)
+    bubble_sort(screen, to_sort)
     
 
 
