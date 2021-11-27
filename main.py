@@ -1,5 +1,4 @@
 import sys
-from time import sleep
 import pygame
 from pygame.locals import *
 from colors import *
@@ -36,6 +35,7 @@ def unhighlight_element(screen, arr, index):
     draw_text(screen, str(arr[index]), 'freesansbold.ttf', 16, x, 400, GREEN, BLUE)
 
 def draw_array(screen, arr):
+    screen.fill(BLACK)
     size = len(arr)
     for i in range(size):
         x = 50 * i
@@ -43,8 +43,7 @@ def draw_array(screen, arr):
         height = arr[i] * UNIT
         y = 400 - height
         draw_rect(screen, RED, x, y, width, height)
-        draw_text(screen, str(to_sort[i]), 'freesansbold.ttf', 16, x, 400, GREEN, BLUE)
-    pygame.display.flip()
+        draw_text(screen, str(arr[i]), 'freesansbold.ttf', 16, x, 400, GREEN, BLUE)
 
         
 def bubble_sort(screen, arr):
@@ -52,19 +51,28 @@ def bubble_sort(screen, arr):
     for i in range(n-1):
         for j in range(0, n-i-1):
             highlight_element(screen, arr, j)
+            pygame.display.flip()
+            pygame.time.delay(1000)
             highlight_element(screen, arr, j+1)
-            sleep(2)
+            pygame.display.flip()
+            pygame.time.delay(1000)
             unhighlight_element(screen, arr, j)
+            pygame.display.flip()
+            pygame.time.delay(1000)
             unhighlight_element(screen, arr, j+1)
             if arr[j] > arr[j + 1] :
                 arr[j], arr[j + 1] = arr[j + 1], arr[j]
-                draw_array(screen, arr)
-                sleep(1)
+            print(arr)
+            draw_array(screen, arr)
+            pygame.display.flip()
+            pygame.time.delay(2000)
 
 
 def draw(screen):
     screen.fill(BLACK)
-    # draw_array(screen, to_sort)
+    draw_array(screen, to_sort)
+    pygame.display.flip()
+    pygame.time.delay(2000)
     bubble_sort(screen, to_sort)
     
 
@@ -75,7 +83,7 @@ def update(dt):
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
-        # pygame.display.update()
+        pygame.display.update()
 
 
 
@@ -87,7 +95,6 @@ def main():
 
 
     dt = 1 / FPS
-    
     while True:
         draw(screen)
         update(dt)
