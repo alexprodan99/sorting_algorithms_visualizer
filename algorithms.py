@@ -115,3 +115,53 @@ def selection_sort(screen, arr):
         draw_explanation(screen, f'swap {arr[i]} with {arr[min_idx]}')
         arr[i], arr[min_idx] = arr[min_idx], arr[i]
         draw_array(screen, arr)
+        
+def partition(screen, arr, low, high):
+    i = low - 1
+    pivot = arr[high]
+    draw_explanation(screen, f'choose pivot {pivot}')
+    highlight_element(screen, arr, high)
+    unhighlight_element(screen, arr, high)
+
+    for j in range(low, high):
+        draw_explanation(screen, f'compare {arr[j]} and {pivot}')
+        highlight_element(screen, arr, j)
+        highlight_element(screen, arr, high)
+        unhighlight_element(screen, arr, j)
+        unhighlight_element(screen, arr, high)
+        if arr[j] <= pivot:
+            i = i + 1
+            draw_array(screen, arr)
+            draw_explanation(screen, f'swap {arr[i]} and {arr[j]}')
+            highlight_element(screen, arr, i)
+            highlight_element(screen, arr, j)
+            unhighlight_element(screen, arr, i)
+            unhighlight_element(screen, arr, j)
+            arr[i], arr[j] = arr[j], arr[i]
+            draw_array(screen, arr)
+
+    draw_explanation(screen, f'swap {arr[i+1]} and {arr[high]}')
+    highlight_element(screen, arr, i+1)
+    highlight_element(screen, arr, high)
+    unhighlight_element(screen, arr, i+1)
+    unhighlight_element(screen, arr, high)
+    arr[i+1], arr[high] = arr[high], arr[i+1]
+    draw_array(screen, arr)
+    return i + 1
+
+
+def quicksort_util(screen, arr, low, high):
+    if len(arr) == 1:
+        return arr
+    if low < high:
+        pi = partition(screen, arr, low, high)
+        
+        quicksort_util(screen, arr, low, pi - 1)
+        quicksort_util(screen, arr, pi + 1, high)
+
+
+def quick_sort(screen, arr):
+    low = 0
+    high = len(arr) - 1
+    quicksort_util(screen, arr, low, high)
+

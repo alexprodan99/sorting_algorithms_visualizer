@@ -29,7 +29,7 @@ def update(dt):
 
 class ValidateAlgorithm(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
-        if values not in ['bubble_sort', 'insertion_sort', 'selection_sort']:
+        if values not in ['bubble_sort', 'insertion_sort', 'selection_sort', 'quick_sort']:
             parser.error(f"Please enter a valid algorithm. Got: {values}")
         setattr(namespace, self.dest, values)
 
