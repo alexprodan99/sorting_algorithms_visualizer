@@ -1,7 +1,6 @@
 import sys
 import argparse
 import pygame
-from threading import local
 from pygame.locals import *
 from algorithms import *
 from data import *
