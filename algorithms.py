@@ -94,4 +94,24 @@ def insertion_sort(screen, arr):
         draw_explanation(screen, f'put key {key} at index {j+1}')
         draw_array(screen, arr)
         
+
+def selection_sort(screen, arr):
+    for i in range(len(arr)):
+        draw_explanation(screen, f'consider min_idx as {i}')
+        highlight_element(screen, arr, i)
+        unhighlight_element(screen, arr, i)
         
+        min_idx = i
+        for j in range(i+1, len(arr)):
+            draw_explanation(screen, f'compare {arr[min_idx]} with {arr[j]}')
+            highlight_element(screen, arr, min_idx)
+            highlight_element(screen, arr, j)
+            unhighlight_element(screen, arr, min_idx)
+            unhighlight_element(screen, arr, j)
+            
+            if arr[min_idx] > arr[j]:
+                draw_explanation(screen, f'change min_idx to {j}')
+                min_idx = j
+        draw_explanation(screen, f'swap {arr[i]} with {arr[min_idx]}')
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+        draw_array(screen, arr)
