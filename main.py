@@ -1,98 +1,47 @@
 import sys
+import argparse
 import pygame
+from threading import local
 from pygame.locals import *
-from colors import *
+from algorithms import *
+from data import *
 
 FPS = 60
 WIDTH, HEIGHT = 640, 480
-UNIT = .5
-to_sort = [100,241,123,124,345,416, 500, 600, 10]
-size = len(to_sort)
-
-
-def draw_rect(surface, color, x, y, width, height):
-    pygame.draw.rect(surface, color, pygame.Rect(x, y, width, height))
-
-def draw_text(surface, text, font_name, font_size, x, y, text_color, background_color):
-    font = pygame.font.Font(font_name, font_size)
-    text = font.render(text, True, text_color, background_color)
-    surface.blit(text, (x,y))
-
-def highlight_element(screen, arr, index ):
-    x = 50 * index
-    width = 30
-    height = arr[index] * UNIT
-    y = 400 - height
-    draw_rect(screen, BLUE, x, y, width, height)
-    draw_text(screen, str(arr[index]), 'freesansbold.ttf', 16, x, 400, GREEN, BLUE)
-
-def unhighlight_element(screen, arr, index):
-    x = 50 * index
-    width = 30
-    height = arr[index] * UNIT
-    y = 400 - height
-    draw_rect(screen, RED, x, y, width, height)
-    draw_text(screen, str(arr[index]), 'freesansbold.ttf', 16, x, 400, GREEN, BLUE)
-
-def draw_array(screen, arr):
-    screen.fill(BLACK)
-    size = len(arr)
-    for i in range(size):
-        x = 50 * i
-        width = 30
-        height = arr[i] * UNIT
-        y = 400 - height
-        draw_rect(screen, RED, x, y, width, height)
-        draw_text(screen, str(arr[i]), 'freesansbold.ttf', 16, x, 400, GREEN, BLUE)
-
-        
-def bubble_sort(screen, arr):
-    n = len(arr)
-    for i in range(n-1):
-        for j in range(0, n-i-1):
-            highlight_element(screen, arr, j)
-            pygame.display.flip()
-            pygame.time.delay(1000)
-            highlight_element(screen, arr, j+1)
-            pygame.display.flip()
-            pygame.time.delay(1000)
-            unhighlight_element(screen, arr, j)
-            pygame.display.flip()
-            pygame.time.delay(1000)
-            unhighlight_element(screen, arr, j+1)
-            if arr[j] > arr[j + 1] :
-                arr[j], arr[j + 1] = arr[j + 1], arr[j]
-            print(arr)
-            draw_array(screen, arr)
-            pygame.display.flip()
-            pygame.time.delay(2000)
-
+args = {}
 
 def draw(screen):
+    global args
     screen.fill(BLACK)
     draw_array(screen, to_sort)
     pygame.display.flip()
     pygame.time.delay(2000)
-    bubble_sort(screen, to_sort)
-    
-
-
+    if 'algorithm' in args:
+        eval(args['algorithm'])(screen, to_sort)
 
 def update(dt):
     for event in pygame.event.get():
-        if event.type == QUIT:
+        if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        pygame.display.update()
+    pygame.display.update()
 
 
+class ValidateAlgorithm(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        if values not in ['bubble_sort', 'insertion_sort']:
+            parser.error(f"Please enter a valid algorithm. Got: {values}")
+        setattr(namespace, self.dest, values)
 
 def main():
+    global args
+    parser = argparse.ArgumentParser(description="Welcome to sorting algorithms visualizer. Please specify your sorting algorithm(bubble_sort/insertion_sort).")
+    parser.add_argument('-a', '--algorithm', help="Sorting algorithm that will be used in demo.", required=True, action=ValidateAlgorithm)
+    args = vars(parser.parse_args())
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     fps_clock = pygame.time.Clock()
     pygame.display.set_caption('Sorting Algorithms Visualizer')
-
 
     dt = 1 / FPS
     while True:
