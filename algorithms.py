@@ -6,7 +6,7 @@ UNIT = .5
 
 def flip_and_delay(delay):
     pygame.display.flip()
-    pygame.time.delay(delay)
+    pygame.time.wait(delay)
 
 def draw_rect(surface, color, x, y, width, height):
     pygame.draw.rect(surface, color, pygame.Rect(x, y, width, height))
@@ -66,6 +66,7 @@ def bubble_sort(screen, arr):
             else:
                 draw_explanation(screen, f'not swap {arr[j]} and {arr[j+1]}')
             draw_array(screen, arr)
+    return True
             
 
 def insertion_sort(screen, arr):
@@ -93,7 +94,7 @@ def insertion_sort(screen, arr):
         arr[j+1] = key
         draw_explanation(screen, f'put key {key} at index {j+1}')
         draw_array(screen, arr)
-        
+    return True
 
 def selection_sort(screen, arr):
     for i in range(len(arr)):
@@ -115,6 +116,7 @@ def selection_sort(screen, arr):
         draw_explanation(screen, f'swap {arr[i]} with {arr[min_idx]}')
         arr[i], arr[min_idx] = arr[min_idx], arr[i]
         draw_array(screen, arr)
+    return True
         
 def partition(screen, arr, low, high):
     i = low - 1
@@ -164,4 +166,5 @@ def quick_sort(screen, arr):
     low = 0
     high = len(arr) - 1
     quicksort_util(screen, arr, low, high)
+    return True
 
